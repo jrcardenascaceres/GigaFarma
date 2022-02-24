@@ -17,9 +17,11 @@ $(document).ready(function () {
                         $("#mdlGigaFarma").modal("show");
                         if (id === "regPersona") {
                         } else if (id === "regProducto") {
+                            regProducto();
                         } else {
                             switch (clase) {
-                                case "valor1":
+                                case "actProducto":
+                                    actProducto()
                                     break;
                                 case "valor2":
                                     break;
@@ -29,6 +31,13 @@ $(document).ready(function () {
                 });
             }
         });
+    }
+    
+    function regProducto() {
+        
+    }
+    function actProducto() {
+        
     }
 
 

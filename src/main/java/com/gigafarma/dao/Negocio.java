@@ -76,17 +76,16 @@ public class Negocio {
     public Producto regProducto(Producto p) {
         Respuesta r = new Respuesta();
         try {
-            String sql = "{CALL SP_INSERT_PRODUCTO(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            String sql = "{CALL SP_INSERT_PRODUCTO(?, ?, ?, ?, ?, ?, ?, ?)}";
             cs = cdb.getConnection().prepareCall(sql);
-            cs.setString(1, p.getESTADO());
-            cs.setInt(2, p.getUSU_ALT());
-            cs.setString(3, p.getDESCRIPCION());
-            cs.setString(4, p.getNOMBRE());
-            cs.setInt(5, p.getID_LABORATORIO());
-            cs.setInt(6, p.getID_CATEGORIA());
-            cs.setDouble(7, p.getPRECIO());
-            cs.setInt(8, p.getCANTIDAD());
-            cs.setString(9, p.getIMAGEN());
+            cs.setInt(1, p.getUSU_ALT());
+            cs.setString(2, p.getDESCRIPCION());
+            cs.setString(3, p.getNOMBRE());
+            cs.setInt(4, p.getID_LABORATORIO());
+            cs.setInt(5, p.getID_CATEGORIA());
+            cs.setDouble(6, p.getPRECIO());
+            cs.setInt(7, p.getCANTIDAD());
+            cs.setString(8, p.getIMAGEN());
             if (cs.executeUpdate() > 0) {
                 r.setEstado(true);
                 r.setMensaje("Producto registrado.");

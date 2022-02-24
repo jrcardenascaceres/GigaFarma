@@ -60,6 +60,29 @@ public class Control extends HttpServlet {
     protected void registrarProducto(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Producto p = new Producto();
+        p.setNOMBRE(request.getParameter("nombre"));
+//        ----------------
+//        String arch = getServletContext().getRealPath("/assets/img/productos/");
+//        arch = arch.replaceAll("\\\\", "/");
+//        int pos = arch.indexOf("target");
+//        String res = arch.substring(0, pos - 1);
+//        arch = res + "/src/main/webapp/files";
+//        
+//        DiskFileItemFactory factory = new DiskFileItemFactory();
+//        factory.setSizeThreshold(1024);
+//        factory.setRepository(new File(arch));
+//        ServletFileUpload upload = new ServletFileUpload(factory);
+//        try {
+//            List<FileItem> partes = upload.parseRequest(request);
+//            for (FileItem item : partes) {
+//                File file = new File(arch, item.getName());
+//                item.write(file);
+//            }
+//            request.setAttribute("dato", "Archivo subido ok!!!");
+//        } catch (Exception ex) {
+//            request.setAttribute("dato", ex.getMessage());
+//        }
+//--------------------
         negocio.regProducto(p);
         request.getRequestDispatcher("/Productos.jsp").forward(request, response);
     }
