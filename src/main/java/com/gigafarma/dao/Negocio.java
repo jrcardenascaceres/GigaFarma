@@ -1,5 +1,7 @@
 package com.gigafarma.dao;
 
+import com.gigafarma.modelo.Categoria;
+import com.gigafarma.modelo.Laboratorio;
 import com.gigafarma.modelo.Persona;
 import com.gigafarma.modelo.Producto;
 import com.gigafarma.modelo.Respuesta;
@@ -104,6 +106,23 @@ public class Negocio {
         return p;
     }
 
+    public String getNextCodProd() {
+        String nextCodProd = "";
+        try {
+            String sql = "{CALL SP_NEXT_COD_PROD()}";
+            cs = cdb.getConnection().prepareCall(sql);
+            rs = cs.executeQuery();
+            while (rs.next()) {
+                nextCodProd = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return nextCodProd;
+    }
+
     public List<Producto> lisProductos() {
         List<Producto> productos = new ArrayList();
         try {
@@ -134,18 +153,17 @@ public class Negocio {
     public Producto actProducto(Producto p) {
         Respuesta r = new Respuesta();
         try {
-            String sql = "{CALL SP_UPDATE_PRODUCTO(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            String sql = "{CALL SP_UPDATE_PRODUCTO(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
             cs = cdb.getConnection().prepareCall(sql);
             cs.setInt(1, p.getID_PRODUCTO());
-            cs.setString(2, p.getESTADO());
-            cs.setInt(3, p.getUSU_MOD());
-            cs.setString(4, p.getDESCRIPCION());
-            cs.setString(5, p.getNOMBRE());
-            cs.setInt(6, p.getID_LABORATORIO());
-            cs.setInt(7, p.getID_CATEGORIA());
-            cs.setDouble(8, p.getPRECIO());
-            cs.setInt(9, p.getCANTIDAD());
-            cs.setString(10, p.getIMAGEN());
+            cs.setInt(2, p.getUSU_MOD());
+            cs.setString(3, p.getDESCRIPCION());
+            cs.setString(4, p.getNOMBRE());
+            cs.setInt(5, p.getID_LABORATORIO());
+            cs.setInt(6, p.getID_CATEGORIA());
+            cs.setDouble(7, p.getPRECIO());
+            cs.setInt(8, p.getCANTIDAD());
+            cs.setString(9, p.getIMAGEN());
             if (cs.executeUpdate() > 0) {
                 r.setEstado(true);
                 r.setMensaje("Producto actualizado.");
@@ -222,5 +240,48 @@ public class Negocio {
         }
         p.setRespuesta(r);
         return p;
+    }
+
+    public List<Categoria> lisCategorias() {
+        List<Categoria> categorias = new ArrayList();
+        try {
+            String sql = "SELECT ID_CATEGORIA, CATEGORIA FROM gigafarma.categoria;";
+            ps = cdb.getConnection().prepareStatement(sql);
+            rs = ps.executeQuery();
+            Categoria c;
+            while (rs.next()) {
+                c = new Categoria();
+                c.setIdCategoria(rs.getInt(1));
+                c.setCategoria(rs.getString(2));
+                categorias.add(c);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return categorias;
+    }
+
+    public List<Laboratorio> lisLab() {
+        List<Laboratorio> lista = new ArrayList();
+        try {
+            String sql = "SELECT ID_LABORATORIO, ESTADO, DESCRIPCION, NOMBRE FROM LABORATORIO";
+            ps = cdb.getConnection().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Laboratorio l = new Laboratorio();
+                l.setIdlab(rs.getInt(1));
+                l.setEstado(rs.getString(2));
+                l.setDeslab(rs.getString(3));
+                l.setNomlab(rs.getString(4));
+                lista.add(l);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return lista;
     }
 }

@@ -1,22 +1,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
         <title>GigaFarma: La salud es primero</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
-        <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
-
-        <!-- CSS only -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <link rel="stylesheet" href="assets/css/templatemo.css">
-        <link rel="stylesheet" href="assets/css/custom.css">
-
-        <!-- Load fonts style after rendering the layout styles -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-        <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+        <%@include file="includes/cssheader.jsp" %>
     </head>
     <body>
         <!-- Start Top Nav -->
@@ -40,79 +30,7 @@
         </nav>
         <!-- Close Top Nav -->
 
-
-        <!-- Header -->
-        <nav class="navbar navbar-expand-lg navbar-light shadow">
-            <div class="container d-flex justify-content-between align-items-center">
-
-                <a class="navbar-brand text-success logo h1 align-self-center" href="index.html">
-                    GigaFarma
-                </a>
-
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
-                    <div class="flex-fill">
-                        <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="index.html">Inicio</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="about.html">Acerca de</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="shop.html">Tienda</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="contact.html">Contacto</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="navbar align-self-center d-flex">
-                        <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
-                                <div class="input-group-text">
-                                    <i class="fa fa-fw fa-search"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
-                            <i class="fa fa-fw fa-search text-dark mr-2"></i>
-                        </a>
-                        <a class="nav-icon position-relative text-decoration-none" href="#">
-                            <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                            <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"><%=(session.getAttribute("carrito") != null) ? session.getAttribute("cantArticulos") : ""%></span>
-                        </a>
-                        <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                            <ul class="navbar-nav">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa fa-user-circle"></i>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
-                                        <%
-                                            if (session.getAttribute("idUsuario") != null) {
-                                        %>
-                                        <li><a class="dropdown-item" href="form_user.jsp">Actualizar datos</a></li>
-                                            <%
-                                            } else {
-                                            %>
-                                        <li><a class="dropdown-item" href="login.jsp">Iniciar sesión</a></li>
-                                        <li><a class="dropdown-item" href="register.html">Registrarse</a></li>
-                                            <%}%>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </nav>
-        <!-- Close Header -->
+        <jsp:include page="includes/header.jsp" />
 
         <!-- Modal -->
         <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -419,14 +337,6 @@
 
         </footer>
         <!-- End Footer -->
-
-        <!-- Start Script -->
-        <script src="assets/js/jquery-1.11.0.min.js"></script>
-        <script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
-        <!-- JavaScript Bundle with Popper -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-        <script src="assets/js/templatemo.js"></script>
-        <script src="assets/js/custom.js"></script>
-        <!-- End Script -->
+        <%@include file="includes/jsfooter.jsp" %>
     </body>
 </html>

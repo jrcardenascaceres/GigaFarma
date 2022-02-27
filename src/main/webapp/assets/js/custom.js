@@ -21,7 +21,7 @@ $(document).ready(function () {
                         } else {
                             switch (clase) {
                                 case "actProducto":
-                                    actProducto()
+                                    actProducto();
                                     break;
                                 case "valor2":
                                     break;
@@ -32,14 +32,93 @@ $(document).ready(function () {
             }
         });
     }
-    
-    function regProducto() {
-        
-    }
-    function actProducto() {
-        
-    }
 
+    function regProducto() {
+        $("#formProducto").validate({
+            rules: {
+                nombre: "required",
+                categoria: "required",
+                laboratorio: "required",
+                precio: "required",
+                cantidad: "required",
+                imagen: "required"
+            },
+            submitHandler: function (form) {
+                var formData = new FormData(form);
+                $.ajax({
+                    type: $(form).attr('method'),
+                    enctype: "multipart/form-data",
+                    url: $(form).attr('action'),                    
+                    dataType: "json",
+                    data: formData,//$(form).serialize(),
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    beforeSend: function () {
+                        $("form :input").prop("disabled", true);
+                    },
+                    success: function (data) {
+                        const rsp = data.respuesta;
+                        $.notify(rsp.mensaje, rsp.tipo);
+                        if (rsp.estado) {
+                            $("#mdlGigaFarma").modal("hide");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        $.notify(errorThrown, "error");
+                    },
+                    complete: function () {
+                        $("form :input").prop("disabled", false);
+                    }
+                });
+            }
+        });
+    }
+    
+    function actProducto() {
+        $("#formProducto").validate({
+            rules: {
+                nombre: "required",
+                categoria: "required",
+                laboratorio: "required",
+                precio: "required",
+                cantidad: "required"
+            },
+            submitHandler: function (form) {
+                var formData = new FormData(form);
+                $.ajax({
+                    type: $(form).attr('method'),
+                    enctype: "multipart/form-data",
+                    url: $(form).attr('action'),                    
+                    dataType: "json",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    beforeSend: function () {
+                        $("form :input").prop("disabled", true);
+                    },
+                    success: function (data) {
+                        const rsp = data.respuesta;
+                        $.notify(rsp.mensaje, rsp.tipo);
+                        if (rsp.estado) {
+                            $("#mdlGigaFarma").modal("hide");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        $.notify(errorThrown, "error");
+                    },
+                    complete: function () {
+                        $("form :input").prop("disabled", false);
+                    }
+                });
+            }
+        });
+    }
 
     $("#tblProductos").DataTable({
         "language": {

@@ -67,7 +67,7 @@
                     event.preventDefault();
                     $.ajax({
                         type: "post",
-                        url: "${pageContext.request.contextPath}/login",
+                        url: "Login",
                         data: {
                             "accion": $("#accion").val(),
                             "usuario": $("#usuario").val(),
