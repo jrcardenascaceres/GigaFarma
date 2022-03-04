@@ -242,6 +242,33 @@ public class Negocio {
         return p;
     }
 
+    public List<Producto> lisProductosTop() {
+        List<Producto> productos = new ArrayList();
+        try {
+            String sql = "SELECT ID_PRODUCTO, NOMBRE, DESCRIPCION, ID_LABORATORIO, ID_CATEGORIA, PRECIO, CANTIDAD, IMAGEN FROM gigafarma.producto WHERE ESTADO = 'A';";
+            ps = cdb.getConnection().prepareStatement(sql);
+            rs = ps.executeQuery();
+            Producto p;
+            while (rs.next()) {
+                p = new Producto();
+                p.setID_PRODUCTO(rs.getInt(1));
+                p.setNOMBRE(rs.getString(2));
+                p.setDESCRIPCION(rs.getString(3));
+                p.setID_LABORATORIO(rs.getInt(4));
+                p.setID_CATEGORIA(rs.getInt(5));
+                p.setPRECIO(rs.getDouble(6));
+                p.setCANTIDAD(rs.getInt(7));
+                p.setIMAGEN(rs.getString(8));
+                productos.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return productos;
+    }
+
     public List<Categoria> lisCategorias() {
         List<Categoria> categorias = new ArrayList();
         try {
@@ -261,6 +288,35 @@ public class Negocio {
             close();
         }
         return categorias;
+    }
+    
+    public Laboratorio obtenerLabXId(int idLab) {
+        Laboratorio l = new Laboratorio();
+        Respuesta r = new Respuesta();
+        try {
+            String sql = "SELECT ID_LABORATORIO, DESCRIPCION, NOMBRE FROM gigafarma.laboratorio WHERE ID_LABORATORIO = ?"; 
+            ps = cdb.getConnection().prepareStatement(sql);
+            ps.setInt(1, idLab);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                l.setIdlab(rs.getInt(1));
+                l.setDeslab(rs.getString(2));
+                l.setNomlab(rs.getString(3));
+                r.setEstado(true);
+                r.setMensaje("Laboratorio encontrado.");
+                r.setTipo("success");
+            } else {
+                r.setMensaje("El laboratorio no existe.");
+                r.setTipo("warn");
+            }
+        } catch (SQLException e) {
+            r.setMensaje(e.getMessage());
+            r.setTipo("error");
+        } finally {
+            close();
+        }
+        l.setRespuesta(r);
+        return l;
     }
 
     public List<Laboratorio> lisLab() {

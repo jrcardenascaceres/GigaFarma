@@ -6,13 +6,17 @@
 package com.gigafarma.servlets;
 
 import com.gigafarma.dao.Negocio;
+import com.gigafarma.modelo.Compra;
 import com.gigafarma.modelo.Producto;
+import com.gigafarma.modelo.RespuestaCarrito;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -59,6 +63,12 @@ public class Control extends HttpServlet {
                 break;
             case "eliProducto":
                 eliminarProducto(request, response);
+                break;
+            case "agregarACarrito":
+                agregarAlCarrito(request, response);
+                break;
+            case "verCarrito":
+                verCarrito(request, response);
                 break;
         }
     }
@@ -125,7 +135,7 @@ public class Control extends HttpServlet {
         String fileName = part.getSubmittedFileName();
         boolean isUpdate = false;
         if (fileName.isEmpty()) {
-           fileName = request.getParameter("prevImg"); 
+            fileName = request.getParameter("prevImg");
         } else {
             String extension = "";
             int index = fileName.lastIndexOf('.');
@@ -160,10 +170,57 @@ public class Control extends HttpServlet {
         p.setID_PRODUCTO(Integer.parseInt(request.getParameter("idProducto")));
         p.setESTADO("E");
         p.setUSU_BAJ(Integer.parseInt(sesionOk.getAttribute("idUsuario").toString()));
-        
+
         PrintWriter pw = response.getWriter();
         pw.println(new Gson().toJson(negocio.eliProducto(p)));
         request.getRequestDispatcher("/productos.jsp").forward(request, response);
+    }
+
+    protected void agregarAlCarrito(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession hs = request.getSession();
+        int idProd = Integer.parseInt(request.getParameter("idProducto"));
+        int cant = Integer.parseInt(request.getParameter("cantidad"));
+        Producto prod = negocio.obtenerProductoXId(idProd);
+        Compra compra = new Compra();
+        compra.setID_PRODUCTO(idProd);
+        compra.setIMAGEN(prod.getIMAGEN());
+        compra.setNOMBRE(prod.getNOMBRE());
+        compra.setDESCRIPCION(prod.getDESCRIPCION());
+        compra.setPRECIO(prod.getPRECIO());
+        compra.setCANTIDAD(prod.getCANTIDAD());
+        compra.setCantidad(cant);        
+        
+        RespuestaCarrito rc = new RespuestaCarrito();
+        List<Compra> compras;
+        if (hs.getAttribute("carrito") == null) {
+            compras = new ArrayList();
+        } else {
+            compras = (ArrayList<Compra>) hs.getAttribute("carrito");            
+        }
+        
+        compras.add(compra);
+        rc.setCompras(compras);
+        rc.setMensaje("El producto fue añadido con éxito al carro de compras.");
+        rc.setTipo("success");
+        hs.setAttribute("carrito", compras);
+        hs.setAttribute("cantArticulos", compras.size());
+        
+        PrintWriter pw = response.getWriter();
+        pw.println(new Gson().toJson(rc));
+    }
+
+    protected void verCarrito(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession hs = request.getSession();
+        List<Compra> compras;
+        if (hs.getAttribute("carrito") == null) {
+            compras = new ArrayList();
+        } else {
+            compras = (ArrayList<Compra>) hs.getAttribute("carrito");
+        }
+        PrintWriter pw = response.getWriter();
+        pw.println(new Gson().toJson(compras));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -13,8 +13,32 @@
         <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
             <div class="flex-fill">
                 <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                    <%
+                    if (session.getAttribute("perfil") != null && session.getAttribute("perfil").equals("0")) {
+                    %>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">Inicio</a>
+                        <a class="nav-link" href="personas.jsp">Personas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="productos.jsp">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="laboratorios.jsp">Laboratorios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="categorias.jsp">Categorías</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ofertas.jsp">Ofertas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ventas.jsp">Ventas</a>
+                    </li>
+                    <%
+                    } else {
+                    %>
+                    <li class="nav-item">
+                        <a class="nav-link" href=".">Inicio</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="about.html">Acerca de</a>
@@ -25,6 +49,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html">Contacto</a>
                     </li>
+                    <%}%>
                 </ul>
             </div>
             <div class="navbar align-self-center d-flex">
@@ -39,9 +64,9 @@
                 <a class="nav-icon d-none d-lg-inline" href="#" data-bs-toggle="modal" data-bs-target="#templatemo_search">
                     <i class="fa fa-fw fa-search text-dark mr-2"></i>
                 </a>
-                <a class="nav-icon position-relative text-decoration-none" href="#">
+                <a class="nav-icon position-relative text-decoration-none" href="forms/form_carrito.jsp" id="verCarrito">
                     <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                    <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"><%=(session.getAttribute("carrito") != null) ? session.getAttribute("cantArticulos") : ""%></span>
+                    <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark" id="totItemCarr"><%=(session.getAttribute("carrito") != null) ? session.getAttribute("cantArticulos") : ""%></span>
                 </a>
                 <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
                     <ul class="navbar-nav">
@@ -51,16 +76,16 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
                                 <%
-                                    if (session.getAttribute("idUsuario") != null) {
+                                if (session.getAttribute("idUsuario") != null) {
                                 %>
                                 <li><a class="dropdown-item" href="form_user.jsp">Actualizar datos</a></li>
                                 <li><a class="dropdown-item" href="Control?accion=cerrarSes">Cerrar Sesión</a></li>
-                                    <%
-                                    } else {
-                                    %>
+                                <%
+                                } else {
+                                %>
                                 <li><a class="dropdown-item" href="login.jsp">Iniciar sesión</a></li>
                                 <li><a class="dropdown-item" href="register.html">Registrarse</a></li>
-                                    <%}%>
+                                <%}%>
                             </ul>
                         </li>
                     </ul>
@@ -71,3 +96,5 @@
     </div>
 </nav>
 <!-- Close Header -->
+
+<div class="modal fade" id="mdlGigaFarma" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false"></div>

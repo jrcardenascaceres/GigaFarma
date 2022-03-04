@@ -52,8 +52,6 @@
             </div>
         </div>
 
-        <div class="modal fade" id="mdlGigaFarma" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false"></div>
-
         <!-- Start Featured Product -->
         <section class="bg-light">
             <div class="container py-4">

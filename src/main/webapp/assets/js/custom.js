@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
     function modales() {
-        $("#regProducto, .actProducto").click(function (e) {
+        $("#regProducto, .actProducto, #verCarrito").click(function (e) {
             e.preventDefault();
             var url = $(this).attr("href");
             var id = $(this).attr("id");
@@ -18,6 +18,7 @@ $(document).ready(function () {
                         if (id === "regPersona") {
                         } else if (id === "regProducto") {
                             regProducto();
+                        } else if (id === "verCarrito") {
                         } else {
                             switch (clase) {
                                 case "actProducto":
@@ -131,4 +132,6 @@ $(document).ready(function () {
             modales();
         }
     });
+    
+    modales();
 });

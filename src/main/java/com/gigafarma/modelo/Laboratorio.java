@@ -6,7 +6,8 @@ public class Laboratorio {
     private String estado;
     private String deslab;
     private String nomlab;
-
+    private Respuesta respuesta;
+    
     public int getIdlab() {
         return idlab;
     }
@@ -39,5 +40,11 @@ public class Laboratorio {
         this.nomlab = nomlab;
     }
 
-    
+    public Respuesta getRespuesta() {
+        return respuesta;
+    }
+
+    public void setRespuesta(Respuesta respuesta) {
+        this.respuesta = respuesta;
+    }    
 }
