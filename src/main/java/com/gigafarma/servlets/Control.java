@@ -70,6 +70,9 @@ public class Control extends HttpServlet {
             case "verCarrito":
                 verCarrito(request, response);
                 break;
+            case "eliProDCarr":
+                eliProDCarr(request, response);
+                break;
         }
     }
 
@@ -173,7 +176,6 @@ public class Control extends HttpServlet {
 
         PrintWriter pw = response.getWriter();
         pw.println(new Gson().toJson(negocio.eliProducto(p)));
-        request.getRequestDispatcher("/productos.jsp").forward(request, response);
     }
 
     protected void agregarAlCarrito(HttpServletRequest request, HttpServletResponse response)
@@ -189,23 +191,23 @@ public class Control extends HttpServlet {
         compra.setDESCRIPCION(prod.getDESCRIPCION());
         compra.setPRECIO(prod.getPRECIO());
         compra.setCANTIDAD(prod.getCANTIDAD());
-        compra.setCantidad(cant);        
-        
+        compra.setCantidad(cant);
+
         RespuestaCarrito rc = new RespuestaCarrito();
         List<Compra> compras;
         if (hs.getAttribute("carrito") == null) {
             compras = new ArrayList();
         } else {
-            compras = (ArrayList<Compra>) hs.getAttribute("carrito");            
+            compras = (ArrayList<Compra>) hs.getAttribute("carrito");
         }
-        
+
         compras.add(compra);
         rc.setCompras(compras);
         rc.setMensaje("El producto fue añadido con éxito al carro de compras.");
         rc.setTipo("success");
         hs.setAttribute("carrito", compras);
         hs.setAttribute("cantArticulos", compras.size());
-        
+
         PrintWriter pw = response.getWriter();
         pw.println(new Gson().toJson(rc));
     }
@@ -221,6 +223,16 @@ public class Control extends HttpServlet {
         }
         PrintWriter pw = response.getWriter();
         pw.println(new Gson().toJson(compras));
+    }
+
+    protected void eliProDCarr(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession hs = request.getSession();
+        int indice = Integer.parseInt(request.getParameter("index"));
+        List<Compra> compras = (ArrayList<Compra>) hs.getAttribute("carrito");
+        compras.remove(indice);
+        hs.setAttribute("carrito", compras);
+        request.getRequestDispatcher("/pagCompra.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

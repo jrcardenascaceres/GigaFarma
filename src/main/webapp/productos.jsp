@@ -96,7 +96,7 @@
                             <td>
                                 <div class="text-center">
                                     <a href="forms/form_producto.jsp?accion=actualizar&idProducto=<%=idProducto%>" title="Editar" class="actProducto"><i class="fas fa-edit btn btn-success "></i></a>
-                                    <a href="Control?accion=eliProducto&idProducto=<%=idProducto%>" title="Eliminar" class="eliProducto"><i class="fas fa-trash-alt btn btn-danger"></i></a>
+                                    <button  value="<%=idProducto%>" class="eliProducto"><i class="fas fa-trash-alt btn btn-danger"></i></button>
                                 </div>
                             </td>
                         </tr>

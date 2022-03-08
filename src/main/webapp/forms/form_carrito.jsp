@@ -6,9 +6,6 @@
 <%@page import="com.gigafarma.modelo.Categoria"%>
 <%@page import="com.gigafarma.modelo.Producto"%>
 <%@page import="com.gigafarma.dao.Negocio"%>
-<%
-
-%>
 <div class="modal-dialog modal-xl">
     <div class="modal-content">
         <div class="modal-header">
@@ -102,7 +99,7 @@
                                                 <li class="last"><b>Subtotal de la compra <span>S/ <%=total%></span></b></li>
                                             </ul>
                                             <div class="button5">
-                                                <a href="form_checkout.jsp" class="btn btn-primary">Realizar pedido</a>
+                                                <a href="forms/form_checkout.jsp" class="btn btn-primary">Realizar pedido</a>
                                                 <a href="shop.html" class="btn btn-secondary">Seguir comprando</a>
                                             </div>
                                         </div>
@@ -169,12 +166,12 @@
             $(this).val($(this).data('oldValue'));
         }
     });
-    
+
     $(".input-number").keydown(function (e) {
         // Allow: backspace, delete, tab, escape, enter and .
-        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||// Allow: Ctrl+A
-                (e.keyCode == 65 && e.ctrlKey === true) ||// Allow: home, end, left, right
-                        (e.keyCode >= 35 && e.keyCode <= 39)) {
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 || // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) || // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
             // let it happen, don't do anything
             return;
         }
