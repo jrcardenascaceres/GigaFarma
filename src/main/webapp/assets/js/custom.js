@@ -16,7 +16,7 @@ $(document).ready(function () {
             }
         });
     }
-    
+
     function modales() {
         $("#regProducto, .actProducto, #verCarrito").click(function (e) {
             e.preventDefault();
@@ -81,7 +81,9 @@ $(document).ready(function () {
                         $.notify(rsp.mensaje, rsp.tipo);
                         if (rsp.estado) {
                             $("#mdlGigaFarma").modal("hide");
-                            setTimeout(() => { location.reload(); }, 1000);
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -125,7 +127,9 @@ $(document).ready(function () {
                         $.notify(rsp.mensaje, rsp.tipo);
                         if (rsp.estado) {
                             $("#mdlGigaFarma").modal("hide");
-                            setTimeout(() => { location.reload(); }, 1000);
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -162,12 +166,14 @@ $(document).ready(function () {
                             const rsp = data.respuesta;
                             $.notify(rsp.mensaje, rsp.tipo);
                             if (rsp.estado) {
-                                setTimeout(() => { location.reload(); }, 1000);
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1000);
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             console.log(jqXHR);
-                            $.notify(errorThrown, "error");º
+                            $.notify(errorThrown, "error");
                         },
                         complete: function () {
                             $("body :input").prop("disabled", false);
@@ -180,13 +186,13 @@ $(document).ready(function () {
         });
     }
 
+    confirma();
+    modales();
     $("#tblProductos").DataTable({
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
         },
         initComplete: function (settings, json) {
-            confirma();
-            modales();
         }
     });
 });
