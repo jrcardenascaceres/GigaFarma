@@ -44,7 +44,7 @@
                         <a class="nav-link" href="about.html">Acerca de</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="shop.html">Tienda</a>
+                        <a class="nav-link" href="shop.jsp">Tienda</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html">Contacto</a>

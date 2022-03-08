@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
     function confirma() {
-        $(".eliProducto").click(function (e) {
+        $(".eliProducto, .eliCategoria").click(function (e) {
             e.preventDefault();
             var url = $(this).attr("href");
             var id = $(this).attr("id");
@@ -11,14 +11,17 @@ $(document).ready(function () {
                 switch (clase) {
                     case "eliProducto":
                         eliProducto($(this).attr("value"));
-                        break;
+                    break;
+                    case "eliCategoria":
+                        eliCategoria($(this).attr("value"));
+                    break;
                 }
             }
         });
     }
 
     function modales() {
-        $("#regProducto, .actProducto, #verCarrito").click(function (e) {
+        $("#regProducto, .actProducto, #verCarrito,#regCategoria, .actCategoria").click(function (e) {
             e.preventDefault();
             var url = $(this).attr("href");
             var id = $(this).attr("id");
@@ -35,11 +38,16 @@ $(document).ready(function () {
                         if (id === "regPersona") {
                         } else if (id === "regProducto") {
                             regProducto();
+                        } else if (id === "regCategoria") {
+                            regCategoria();
                         } else if (id === "verCarrito") {
                         } else {
                             switch (clase) {
                                 case "actProducto":
                                     actProducto();
+                                    break;
+                                 case "actCategoria":
+                                    actCategoria();
                                     break;
                                 case "valor2":
                                     break;
@@ -147,7 +155,7 @@ $(document).ready(function () {
     function eliProducto(idProd) {
         $.confirm({
             title: 'Confirmar!',
-            content: '¿Estás seguro de eliminar el produco?',
+            content: '¿Estás seguro de eliminar el producto?',
             buttons: {
                 confirm: function () {
                     $.ajax({
@@ -185,9 +193,137 @@ $(document).ready(function () {
             }
         });
     }
+    
+    function regCategoria() {
+        $("#formCategoria").validate({
+            rules: {
+                nombre: "required",
+                imagen: "required"
+            },
+            submitHandler: function (form) {
+                var formData = new FormData(form);
+                $.ajax({
+                    type: $(form).attr('method'),
+                    enctype: "multipart/form-data",
+                    url: $(form).attr('action'),
+                    dataType: "json",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    beforeSend: function () {
+                        $("form :input").prop("disabled", true);
+                    },
+                    success: function (data) {
+                        const rsp = data.respuesta;
+                        $.notify(rsp.mensaje, rsp.tipo);
+                        if (rsp.estado) {
+                            $("#mdlGigaFarma").modal("hide");
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        $.notify(errorThrown, "error");
+                    },
+                    complete: function () {
+                        $("form :input").prop("disabled", false);
+                    }
+                });
+            }
+        });
+    }
+
+    function actCategoria() {
+        $("#formCategoria").validate({
+            rules: {
+                nombre: "required",
+            },
+            submitHandler: function (form) {
+                var formData = new FormData(form);
+                $.ajax({
+                    type: $(form).attr('method'),
+                    enctype: "multipart/form-data",
+                    url: $(form).attr('action'),
+                    dataType: "json",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    beforeSend: function () {
+                        $("form :input").prop("disabled", true);
+                    },
+                    success: function (data) {
+                        const rsp = data.respuesta;
+                        $.notify(rsp.mensaje, rsp.tipo);
+                        if (rsp.estado) {
+                            $("#mdlGigaFarma").modal("hide");
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        $.notify(errorThrown, "error");
+                    },
+                    complete: function () {
+                        $("form :input").prop("disabled", false);
+                    }
+                });
+            }
+        });
+    }
+    
+    function eliCategoria(idCate) {
+        $.confirm({
+            title: 'Confirmar!',
+            content: '¿Estás seguro de eliminar la categoria?',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: 'Control',
+                        data: {
+                            accion: 'eliCategoria',
+                            idCategoria: idCate
+                        },
+                        dataType: "json",
+                        timeout: 600000,
+                        beforeSend: function () {
+                            $("body :input").prop("disabled", true);
+                        },
+                        success: function (data) {
+                            const rsp = data.respuesta;
+                            $.notify(rsp.mensaje, rsp.tipo);
+                            if (rsp.estado) {
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1000);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR);
+                            $.notify(errorThrown, "error");
+                        },
+                        complete: function () {
+                            $("body :input").prop("disabled", false);
+                        }
+                    });
+                },
+                cancel: function () {
+                }
+            }
+        });
+    }
 
     confirma();
     modales();
+
     $("#tblProductos").DataTable({
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
