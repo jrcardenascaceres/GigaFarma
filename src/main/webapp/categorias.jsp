@@ -1,15 +1,14 @@
 <%@page import="com.gigafarma.modelo.Categoria"%>
-<%@page import="com.gigafarma.modelo.Producto"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.gigafarma.modelo.Producto"%>
 <%@page import="com.gigafarma.dao.Negocio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
     <head>
         <title>GigaFarma: La salud es primero</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <%@include file="includes/cssheader.jsp" %>
     </head>
     <body>
@@ -24,7 +23,7 @@
                         <a class="navbar-sm-brand text-light text-decoration-none" href="tel:010-020-0340">010-020-0340</a>
                     </div>
                     <div>
-                        <a class="text-light" href="#" target="_blank"><i class="fab fa-facebook-f fa-sm fa-fw me-2"></i></a>
+                        <a class="text-light" href="#" target="_blank" rel="sponsored"><i class="fab fa-facebook-f fa-sm fa-fw me-2"></i></a>
                         <a class="text-light" href="#" target="_blank"><i class="fab fa-instagram fa-sm fa-fw me-2"></i></a>
                         <a class="text-light" href="#" target="_blank"><i class="fab fa-twitter fa-sm fa-fw me-2"></i></a>
                         <a class="text-light" href="#" target="_blank"><i class="fab fa-linkedin fa-sm fa-fw"></i></a>
@@ -33,6 +32,7 @@
             </div>
         </nav>
         <!-- Close Top Nav -->
+
 
         <jsp:include page="includes/header.jsp" />
 
@@ -53,127 +53,61 @@
             </div>
         </div>
 
-
-
-        <!-- Start Banner Hero -->
-        <%
-            Negocio n = new Negocio();
-            ArrayList<Producto> productosTop = new ArrayList<>(n.lisProductosTop());
-            String btnCar = "", itemCar = "";
-            int cont = 0;
-            for (Producto producto : productosTop) {
-                int idProducto = producto.getID_PRODUCTO();
-                String active = (cont == 0) ? "active" : "";
-                btnCar += "<li data-bs-target='#template-mo-zay-hero-carousel' data-bs-slide-to='" + cont + "' class='" + active + "'></li>";
-                itemCar += "<div class='carousel-item " + active + "'>"
-                        + "<div class='container'>"
-                        + "<div class='row p-5'>"
-                        + "<div class='mx-auto col-md-8 col-lg-6 order-lg-last'>"
-                        + "<img class='img-fluid' src='./assets/img/productos/" + producto.getIMAGEN() + "' alt=''>"
-                        + "</div>"
-                        + "<div class='col-lg-6 mb-0 d-flex align-items-center'>"
-                        + "<div class='text-align-left'>"
-                        + "<h1 class='h1'>" + producto.getNOMBRE() + "</h1>"
-                        + "<h3 class='h2'>" + producto.getNOMBRE() + "</h3>"
-                        + "<p>" + producto.getDESCRIPCION() + "</p>"
-                        + "</div>"
-                        + "</div>"
-                        + "</div>"
-                        + "</div>"
-                        + "</div>";
-                cont++;
-            }
-
-        %>
-        <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
-            <ol class="carousel-indicators">
-                <%out.println(btnCar);%>
-            </ol>
-            <div class="carousel-inner">
-                <%out.println(itemCar);%>
-            </div>
-            <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
-                <i class="fas fa-chevron-left"></i>
-            </a>
-            <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="next">
-                <i class="fas fa-chevron-right"></i>
-            </a>
-        </div>
-        <!-- End Banner Hero -->
-
-
-        <!-- Start Categories of The Month -->
-        <section class="container py-5">
-            <div class="row text-center pt-3">
-                <div class="col-lg-6 m-auto">
-                    <h1 class="h1">Categorías</h1>
-                    <p>
-                        Estas las categorias de los productos que ofrecemos
-                    </p>
-                </div>
-            </div>
-            <div class="row">
-                <%
-                        ArrayList<Categoria> categorias = new ArrayList<>(n.lisCategorias());
-                        String cate = "";
-                        for (Categoria categoria : categorias) {
-                            int idCategoria = categoria.getIdCategoria();
-                            cate = "<div class='col-12 col-md-4 p-5 mt-3'>"
-                            +"<a href='#'><img src='./assets/img/categorias/"+categoria.getImagen()+"' class='rounded-circle img-fluid border'></a>"                          
-                            +"<h5 class='text-center mt-3 mb-3'>"+categoria.getCategoria()+"</h5>"
-                            +"<p class='text-center'><a class='btn btn-success' href='Control?accion=listprodxcategoria&idCategoria="+idCategoria+"'>Ir a la tienda</a></p>"
-                            +"</div>";
-                            out.println(cate);        
-                        }
-                %>
-            </div>
-        </section>
-        <!-- End Categories of The Month -->
-
+        <div class="modal fade" id="mdlGigaFarma" role="dialog" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false"></div>
 
         <!-- Start Featured Product -->
         <section class="bg-light">
-            <div class="container py-5">
-                <div class="row text-center py-3">
-                    <div class="col-lg-6 m-auto">
-                        <h1 class="h1">Featured Product</h1>
-                        <p>
-                            Reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
-                        </p>
-                    </div>
+            <div class="container py-4">
+                <h5>Lista de categorias</h5>
+                <hr>
+                <div class="float-inline">
+                    <a href="forms/form_categoria.jsp?accion=registrar" id="regCategoria" class="btn btn-success"><i class="fas fa-plus"></i> Agregar</a>
                 </div>
-                <div class="row">
-                    <%
-                        ArrayList<Producto> productos = new ArrayList<>(n.lisProductos());
-                        for (Producto producto : productos) {
-                            int idProducto = producto.getID_PRODUCTO();
-                    %>
-                    <div class="col-12 col-md-4 mb-4">
-                        <div class="card h-100">
-                            <a href="shop_single.jsp?idProducto=<%=idProducto%>">
-                                <img src="assets/img/productos/<%=producto.getIMAGEN()%>" class="card-img-top" alt="...">
-                            </a>
-                            <div class="card-body">
-                                <ul class="list-unstyled d-flex justify-content-between">
-                                    <li>
-                                        <i class="text-warning fa fa-star"></i>
-                                        <i class="text-warning fa fa-star"></i>
-                                        <i class="text-warning fa fa-star"></i>
-                                        <i class="text-muted fa fa-star"></i>
-                                        <i class="text-muted fa fa-star"></i>
-                                    </li>
-                                    <li class="text-muted text-right">S/ <%=producto.getPRECIO()%></li>
-                                </ul>
-                                <a href="shop_single.jsp?idProducto=<%=idProducto%>" class="h2 text-decoration-none text-dark"><%=producto.getNOMBRE()%></a>
-                                <p class="card-text"><%=producto.getDESCRIPCION()%></p>
-                                <p class="text-muted">Reviews (24)</p>
-                            </div>
-                        </div>
-                    </div>
-                    <%
-                        }
-                    %>
-                </div>
+                <hr>
+                <table id="tblProductos" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID_Categoria</th>
+                            <th>Nombre de la Categoria</th>
+                            <th>Imagen</th>                                 
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            Negocio n = new Negocio();
+                            ArrayList<Categoria> categorias = new ArrayList<>(n.lisCategorias());
+                            for (Categoria categoria : categorias) {
+                                int idCategoria = categoria.getIdCategoria();
+                        %>
+                        <tr>
+                            <td><%=idCategoria%></td>
+                            <td><%=categoria.getCategoria()%></td>
+                            <td>
+                                <div class="text-center">
+                                    <img src="assets/img/categorias/<%=categoria.getImagen()%>" class="rounded mx-auto d-block img-fluid img-thumbnail" onerror="src='assets/img/categorias/error.jpg'" alt="alt" style="width: 60px;height: 40px;"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-center">
+                                    <a href="forms/form_categoria.jsp?accion=actualizar&idCategoria=<%=idCategoria%>" title="Editar" class="actCategoria"><i class="fas fa-edit btn btn-success"></i></a>
+                                    <button  value="<%=idCategoria%>" class="eliCategoria"><i class="fas fa-trash-alt btn btn-danger"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <%
+                            }
+                        %>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>ID_Categoria</th>
+                            <th>Nombre de la Categoria</th>
+                            <th>Imagen</th>                             
+                            <th>Acciones</th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </section>
         <!-- End Featured Product -->
@@ -200,7 +134,6 @@
                             </li>
                         </ul>
                     </div>
-
                     <div class="col-md-4 pt-5">
                         <h2 class="h2 text-light border-bottom pb-3 border-light">Productos</h2>
                         <ul class="list-unstyled text-light footer-link-list">
@@ -266,7 +199,6 @@
                     </div>
                 </div>
             </div>
-
         </footer>
         <!-- End Footer -->
         <%@include file="includes/jsfooter.jsp" %>

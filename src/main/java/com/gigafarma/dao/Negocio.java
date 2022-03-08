@@ -269,26 +269,6 @@ public class Negocio {
         return productos;
     }
 
-    public List<Categoria> lisCategorias() {
-        List<Categoria> categorias = new ArrayList();
-        try {
-            String sql = "SELECT ID_CATEGORIA, CATEGORIA FROM gigafarma.categoria;";
-            ps = cdb.getConnection().prepareStatement(sql);
-            rs = ps.executeQuery();
-            Categoria c;
-            while (rs.next()) {
-                c = new Categoria();
-                c.setIdCategoria(rs.getInt(1));
-                c.setCategoria(rs.getString(2));
-                categorias.add(c);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            close();
-        }
-        return categorias;
-    }
     
     public Laboratorio obtenerLabXId(int idLab) {
         Laboratorio l = new Laboratorio();
@@ -340,4 +320,179 @@ public class Negocio {
         }
         return lista;
     }
+    
+       
+    public Categoria regCategoria(Categoria c) {
+        Respuesta r = new Respuesta();
+        try {
+            String sql = "INSERT into gigafarma.categoria (CATEGORIA,IMAGEN) values (?,?)";
+            ps = cdb.getConnection().prepareStatement(sql);
+            ps.setString(1, c.getCategoria());
+            ps.setString(2, c.getImagen());
+            if (ps.executeUpdate() > 0) {
+                r.setEstado(true);
+                r.setMensaje("Categoria registrada.");
+                r.setTipo("success");
+            } else {
+                r.setMensaje("No se puede registrar la categoria.");
+                r.setTipo("error");
+            }
+        } catch (SQLException e) {
+            r.setMensaje(e.getMessage());
+            r.setTipo("error");
+        } finally {
+            close();
+        }
+        c.setRespuesta(r);
+        return c;
+    }
+
+    public List<Categoria> lisCategorias() {
+        List<Categoria> categorias = new ArrayList();
+        try {
+            String sql = "SELECT * from gigafarma.categoria WHERE estado = 'A'";
+            ps = cdb.getConnection().prepareStatement(sql);
+            rs = ps.executeQuery();
+            Categoria c;
+            while (rs.next()) {
+                c = new Categoria();
+                c.setIdCategoria(rs.getInt(1));
+                c.setCategoria(rs.getString(2));
+                c.setImagen(rs.getString(4));
+                categorias.add(c);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return categorias;
+    }
+
+    public Categoria actCategoria(Categoria c) {
+        Respuesta r = new Respuesta();
+        try {
+            String sql = "UPDATE gigafarma.categoria SET CATEGORIA=?,IMAGEN=? WHERE ID_CATEGORIA=?";
+            ps = cdb.getConnection().prepareStatement(sql);
+            ps.setString(1, c.getCategoria());
+            ps.setString(2, c.getImagen());
+            ps.setInt(3, c.getIdCategoria());
+            if (ps.executeUpdate() > 0) {
+                r.setEstado(true);
+                r.setMensaje("Categoria actualizada.");
+                r.setTipo("success");
+            } else {
+                r.setMensaje("No se puede actualizar la categoria.");
+                r.setTipo("error");
+            }
+        } catch (SQLException e) {
+            r.setMensaje(e.getMessage());
+            r.setTipo("error");
+        } finally {
+            close();
+        }
+        c.setRespuesta(r);
+        return c;
+    }
+
+    public Categoria eliCategoria(Categoria c) {
+        Respuesta r = new Respuesta();
+        try {
+            String sql = "UPDATE gigafarma.categoria SET ESTADO=? WHERE ID_CATEGORIA=?";
+            ps = cdb.getConnection().prepareStatement(sql);
+            ps.setString(1,  String.valueOf(c.getEstado()));
+            ps.setInt(2, c.getIdCategoria());
+            if (ps.executeUpdate() > 0) {
+                r.setEstado(true);
+                r.setMensaje("Categoria Eliminada.");
+                r.setTipo("success");
+            } else {
+                r.setMensaje("No se puede eliminar la categoria.");
+                r.setTipo("error");
+            }
+        } catch (SQLException e) {
+            r.setMensaje(e.getMessage());
+            r.setTipo("error");
+        } finally {
+            close();
+        }
+        c.setRespuesta(r);
+        return c;
+    }
+
+    public Categoria obtenerCategoriaXCod(int codigo) {
+        Categoria c = new Categoria();
+        Respuesta r = new Respuesta();
+        try {
+            String sql = "SELECT ID_CATEGORIA, CATEGORIA,IMAGEN FROM gigafarma.categoria WHERE ESTADO = 'A' AND ID_CATEGORIA = ?";
+            ps = cdb.getConnection().prepareStatement(sql);
+            ps.setInt(1, codigo);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                c.setIdCategoria(rs.getInt(1));
+                c.setCategoria(rs.getString(2));
+                c.setImagen(rs.getString(3));
+                r.setEstado(true);
+                r.setMensaje("Categoria encontrada.");
+                r.setTipo("success");
+            } else {
+                r.setMensaje("La Categoria no existe.");
+                r.setTipo("warn");
+            }
+        } catch (SQLException e) {
+            r.setMensaje(e.getMessage());
+            r.setTipo("error");
+        } finally {
+            close();
+        }
+        c.setRespuesta(r);
+        return c;            
+    }
+    
+    public List<Producto> obtenerListProdXCate(int idCategoria) {
+        List<Producto> productos = new ArrayList();
+        try {
+            String sql = "SELECT ID_PRODUCTO, NOMBRE, DESCRIPCION, ID_LABORATORIO, ID_CATEGORIA, PRECIO, CANTIDAD, IMAGEN FROM gigafarma.producto WHERE ID_CATEGORIA =? AND ESTADO ='A'";
+            ps = cdb.getConnection().prepareStatement(sql);
+            ps.setInt(1, idCategoria);
+            rs = ps.executeQuery();
+            Producto p;
+            if (rs.next()) {
+                p = new Producto();
+                p.setID_PRODUCTO(rs.getInt(1));
+                p.setNOMBRE(rs.getString(2));
+                p.setDESCRIPCION(rs.getString(3));
+                p.setID_LABORATORIO(rs.getInt(4));
+                p.setID_CATEGORIA(rs.getInt(5));
+                p.setPRECIO(rs.getDouble(6));
+                p.setCANTIDAD(rs.getInt(7));
+                p.setIMAGEN(rs.getString(8));
+                productos.add(p);
+            } else {
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return productos;            
+    }
+    
+     public String getNextCodCate() {
+        String nextCodCate = "";
+        try {
+            String sql = "{CALL SP_NEXT_COD_CATE()}";
+            cs = cdb.getConnection().prepareCall(sql);
+            rs = cs.executeQuery();
+            while (rs.next()) {
+                nextCodCate = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return nextCodCate;
+    }
+ 
 }

@@ -6,6 +6,7 @@
 package com.gigafarma.servlets;
 
 import com.gigafarma.dao.Negocio;
+import com.gigafarma.modelo.Categoria;
 import com.gigafarma.modelo.Compra;
 import com.gigafarma.modelo.Producto;
 import com.gigafarma.modelo.RespuestaCarrito;
@@ -72,6 +73,24 @@ public class Control extends HttpServlet {
                 break;
             case "eliProDCarr":
                 eliProDCarr(request, response);
+                break;
+            case "lisCategorias":
+                listarCategorias(request, response);
+                break;
+            case "LisProdXCate":
+                obtenerListaProductosXCategoria(request, response);
+                break;
+            case "regCategoria":
+                registrarCategoria(request, response);
+                break;
+            case "actCategoria":
+                actualizarCategoria(request, response);
+                break;
+            case "eliCategoria":
+                eliminarCategoria(request, response);
+                break;
+            case "listprodxcategoria":
+                ListaProductoxCategoria(request, response);
                 break;
         }
     }
@@ -234,6 +253,111 @@ public class Control extends HttpServlet {
         hs.setAttribute("carrito", compras);
         request.getRequestDispatcher("/pagCompra.jsp").forward(request, response);
     }
+    
+    protected void listarCategorias(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Categoria c = new Categoria();
+        negocio.lisCategorias();
+        request.getRequestDispatcher("/Categorias.jsp").forward(request, response);
+    }
+    
+    protected void obtenerListaProductosXCategoria(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Producto p = new Producto();
+        negocio.lisProductos();
+        request.getRequestDispatcher("/Productos.jsp").forward(request, response);
+    }
+    
+    
+    protected void ListaProductoxCategoria(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int idCategoria=Integer.parseInt(request.getParameter("idCategoria"));
+        HttpSession ses = request.getSession();
+        ses.setAttribute("idCategoria", idCategoria);
+        request.getRequestDispatcher("/shop_cate.jsp").forward(request, response);
+    }
+    
+    protected void registrarCategoria(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Categoria c = new Categoria();
+        HttpSession sesionOk = request.getSession();
+        c.setCategoria(request.getParameter("nombre"));
+        Part part = request.getPart("imagen");
+
+        String fileName = part.getSubmittedFileName();
+        String extension = "";
+        int index = fileName.lastIndexOf('.');
+        if (index > 0) {
+            extension = fileName.substring(index + 1);
+        }
+        fileName = negocio.getNextCodCate() + "." + extension;
+        c.setImagen(fileName);
+        Categoria cr=negocio.regCategoria(c);
+        if (cr.getRespuesta().isEstado()) {
+            InputStream is = part.getInputStream();
+            byte[] data = new byte[is.available()];
+            is.read(data);
+            String uploadPath = request.getServletContext().getRealPath("./") + File.separator + "assets" + File.separator + "img" + File.separator + "categorias";
+            String filePath = uploadPath + File.separator + fileName;
+            FileOutputStream fos = new FileOutputStream(filePath);
+            fos.write(data);
+            fos.close();
+        }
+        PrintWriter pw = response.getWriter();
+        pw.println(new Gson().toJson(cr));;
+    }
+    
+    protected void actualizarCategoria(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Categoria c = new Categoria();
+        HttpSession sesionOk = request.getSession();
+        c.setIdCategoria(Integer.parseInt(request.getParameter("idCategoria")));
+        c.setCategoria(request.getParameter("nombre"));
+        
+        Part part = request.getPart("imagen");
+
+        String fileName = part.getSubmittedFileName();
+        boolean isUpdate = false;
+        if (fileName.isEmpty()) {
+            fileName = request.getParameter("prevImg");
+        } else {
+            String extension = "";
+            int index = fileName.lastIndexOf('.');
+            if (index > 0) {
+                extension = fileName.substring(index + 1);
+            }
+            String preName = FilenameUtils.removeExtension(request.getParameter("prevImg"));
+            fileName = preName + "." + extension;
+            isUpdate = true;
+        }
+        c.setImagen(fileName);
+        Categoria cr = negocio.actCategoria(c);
+        
+        if (cr.getRespuesta().isEstado() && isUpdate) {
+            InputStream is = part.getInputStream();
+            byte[] data = new byte[is.available()];
+            is.read(data);
+            String uploadPath = request.getServletContext().getRealPath("./") + File.separator + "assets" + File.separator + "img" + File.separator + "categorias";
+            String filePath = uploadPath + File.separator + fileName;
+            FileOutputStream fos = new FileOutputStream(filePath);
+            fos.write(data);
+            is.close();
+            fos.close();
+        }
+        PrintWriter pw = response.getWriter();
+        pw.println(new Gson().toJson(cr));
+    }
+
+    protected void eliminarCategoria(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Categoria c = new Categoria();
+        c.setIdCategoria(Integer.parseInt(request.getParameter("idCategoria")));
+        c.setEstado('E');
+
+        PrintWriter pw = response.getWriter();
+        pw.println(new Gson().toJson(negocio.eliCategoria(c)));
+    }
+        
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
