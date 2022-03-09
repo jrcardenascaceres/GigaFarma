@@ -500,8 +500,8 @@ public class Negocio {
         try {
             String sql = "{CALL SP_INSERT_VENTA(?, ?, ?, ?, ?, ?)}";
             cs = cdb.getConnection().prepareCall(sql);
-            cs.setInt(1, v.getUSU_ALT());
-            cs.setString(2, v.getDESCRIPCION());
+            cs.setInt(1, v.getID_VENTA());
+            cs.setInt(2, v.getUSU_ALT());
             cs.setString(3, v.getCORREO());
             cs.setString(4, v.getDIRECCION());
             cs.setString(5, v.getTARJETA());
@@ -528,7 +528,7 @@ public class Negocio {
         DetalleVenta dv = new DetalleVenta();
         Respuesta r = new Respuesta();
         try {
-            String sql = "{CALL SP_INSERT_DETVENTA(?, ?, ?, ?, ?, ?)}";
+            String sql = "{CALL SP_INSERT_DETVENTA(?, ?, ?, ?)}";
             cs = cdb.getConnection().prepareCall(sql);
             cs.setInt(1, idVenta);
             cs.setInt(2, idProd);
@@ -550,5 +550,22 @@ public class Negocio {
         }
         dv.setRespuesta(r);
         return dv;
+    }
+    
+    public int getNextIdVenta() {
+        int idVenta = 0;
+        try {
+            String sql = "{CALL SP_NEXT_ID_VENTA()}";
+            cs = cdb.getConnection().prepareCall(sql);
+            rs = cs.executeQuery();
+            while (rs.next()) {
+                idVenta = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return idVenta;
     }
 }

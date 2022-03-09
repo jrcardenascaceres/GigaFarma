@@ -371,16 +371,17 @@ public class Control extends HttpServlet {
         v.setDIRECCION(request.getParameter("direccion") + " | " + request.getParameter("distrito") + " - " + request.getParameter("provincia") + " - " + request.getParameter("departamento"));
         v.setTARJETA(request.getParameter("num_trjt:"));
         v.setTIP_ENTREGA(request.getParameter("metodo_envio:"));
+        int idVenta = negocio.getNextIdVenta();
+        v.setID_VENTA(idVenta);
+        v = negocio.regVenta(v);        
         
-        v = negocio.regVenta(v);
-        
-        int idVenta = 0;
         DetalleVenta dv = new DetalleVenta();
         if (v.getRespuesta().isEstado()) {
             List<Compra> compras = (ArrayList<Compra>) hs.getAttribute("carrito");
             for (Compra cmpr : compras) {
                 negocio.regDetVenta(idVenta, cmpr.getID_PRODUCTO(), cmpr.getPRECIO(), cmpr.getCantidad());
             }
+            hs.setAttribute("carrito", new ArrayList());
         }
         PrintWriter pw = response.getWriter();
         pw.println(new Gson().toJson(v));
