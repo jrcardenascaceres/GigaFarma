@@ -12,7 +12,7 @@ public class Laboratorio {
     private double FEC_MOD;
     private int USU_MOD;
     private double FEC_BAJ;
-    private String USU_BAJ;
+    private int USU_BAJ;
     private String DESCRIPCION;
     private String NOMBRE;
     private Respuesta respuesta;
@@ -20,7 +20,7 @@ public class Laboratorio {
     public Laboratorio() {
     }
 
-    public Laboratorio(int ID_LABORATORIO, String ESTADO, double FEC_ALT, int USU_ALT, double FEC_MOD, int USU_MOD, double FEC_BAJ, String USU_BAJ, String DESCPRICION, String NOMBRE) {
+    public Laboratorio(int ID_LABORATORIO, String ESTADO, double FEC_ALT, int USU_ALT, double FEC_MOD, int USU_MOD, double FEC_BAJ, int USU_BAJ, String DESCPRICION, String NOMBRE) {
         this.ID_LABORATORIO = ID_LABORATORIO;
         this.ESTADO = ESTADO;
         this.FEC_ALT = FEC_ALT;
@@ -89,11 +89,11 @@ public class Laboratorio {
         this.FEC_BAJ = FEC_BAJ;
     }
 
-    public String getUSU_BAJ() {
+    public int getUSU_BAJ() {
         return USU_BAJ;
     }
 
-    public void setUSU_BAJ(String USU_BAJ) {
+    public void setUSU_BAJ(int USU_BAJ) {
         this.USU_BAJ = USU_BAJ;
     }
 

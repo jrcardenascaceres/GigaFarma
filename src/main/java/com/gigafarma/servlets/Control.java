@@ -418,12 +418,11 @@ public class Control extends HttpServlet {
             throws ServletException, IOException {
         Laboratorio l = new Laboratorio();
         HttpSession sesionOk = request.getSession();
-        l.setID_LABORATORIO(Integer.parseInt(request.getParameter("idLaboratorio")));
         l.setESTADO(request.getParameter("Estado"));
         l.setUSU_ALT(Integer.parseInt(sesionOk.getAttribute("idUsuario").toString()));
         l.setDESCRIPCION(request.getParameter("descripcion"));
         l.setNOMBRE(request.getParameter("nombre"));
-        Laboratorio lb = negocio.actLaboratorio(l);
+        Laboratorio lb = negocio.regLaboratorio(l);
         PrintWriter pw = response.getWriter();
         pw.println(new Gson().toJson(lb));
     }
@@ -437,7 +436,6 @@ public class Control extends HttpServlet {
         l.setUSU_MOD(Integer.parseInt(sesionOk.getAttribute("idUsuario").toString()));
         l.setDESCRIPCION(request.getParameter("descripcion"));
         l.setNOMBRE(request.getParameter("nombre"));
-
         
         Laboratorio lb = negocio.actLaboratorio(l);
         
@@ -451,7 +449,7 @@ public class Control extends HttpServlet {
         HttpSession sesionOk = request.getSession();
         l.setID_LABORATORIO(Integer.parseInt(request.getParameter("idLaboratorio")));
         l.setESTADO("E");
-        l.setUSU_BAJ((sesionOk.getAttribute("idLaboratorio").toString()));
+        l.setUSU_BAJ(Integer.parseInt(sesionOk.getAttribute("idUsuario").toString()));
 
         PrintWriter pw = response.getWriter();
         pw.println(new Gson().toJson(negocio.eliLaboratorio(l)));

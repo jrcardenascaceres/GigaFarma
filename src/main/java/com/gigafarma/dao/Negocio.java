@@ -568,6 +568,7 @@ public class Negocio {
         }
         return lista;
     }
+      
 
     public Laboratorio regLaboratorio(Laboratorio l) {
         Respuesta r = new Respuesta();
@@ -652,7 +653,7 @@ public class Negocio {
             cs = cdb.getConnection().prepareCall(sql);
             cs.setInt(1, l.getID_LABORATORIO());
             cs.setString(2, l.getESTADO());
-            cs.setString(3, l.getUSU_BAJ());
+            cs.setInt(3, l.getUSU_BAJ());
             if (cs.executeUpdate() > 0) {
                 r.setEstado(true);
                 r.setMensaje("Laboratorio eliminado.");
