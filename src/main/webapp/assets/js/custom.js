@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
     function confirma() {
-        $(".eliProducto, .eliCategoria").click(function (e) {
+        $(".eliProducto, .eliCategoria, .eliLaboratorio").click(function (e) {
             e.preventDefault();
             var url = $(this).attr("href");
             var id = $(this).attr("id");
@@ -15,13 +15,16 @@ $(document).ready(function () {
                     case "eliCategoria":
                         eliCategoria($(this).attr("value"));
                     break;
+                    case "eliLaboratorio":
+                        eliLaboratorio($(this).attr("value"));
+                    break;
                 }
             }
         });
     }
 
     function modales() {
-        $("#regProducto, .actProducto, #verCarrito,#regCategoria, .actCategoria").click(function (e) {
+        $("#regProducto, .actProducto, #verCarrito,#regCategoria, .actCategoria,#regLaboratorio, .actLaboratorio").click(function (e) {
             e.preventDefault();
             var url = $(this).attr("href");
             var id = $(this).attr("id");
@@ -40,14 +43,19 @@ $(document).ready(function () {
                             regProducto();
                         } else if (id === "regCategoria") {
                             regCategoria();
+                        } else if (id === "regLaboratorio") {
+                            regLaboratorio();
                         } else if (id === "verCarrito") {
                         } else {
                             switch (clase) {
                                 case "actProducto":
                                     actProducto();
                                     break;
-                                 case "actCategoria":
+                                case "actCategoria":
                                     actCategoria();
+                                    break;
+                                case "actLaboratorio":
+                                    actLaboratorio();
                                     break;
                                 case "valor2":
                                     break;
@@ -321,6 +329,133 @@ $(document).ready(function () {
         });
     }
 
+    function regLaboratorio() {
+        $("#formLaboratorio").validate({
+            rules: {
+                nombre: "required",
+                descripcion: "required"
+            },
+            submitHandler: function (form) {
+                var formData = new FormData(form);
+                $.ajax({
+                    type: $(form).attr('method'),
+                    enctype: "multipart/form-data",
+                    url: $(form).attr('action'),
+                    dataType: "json",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    beforeSend: function () {
+                        $("form :input").prop("disabled", true);
+                    },
+                    success: function (data) {
+                        const rsp = data.respuesta;
+                        $.notify(rsp.mensaje, rsp.tipo);
+                        if (rsp.estado) {
+                            $("#mdlGigaFarma").modal("hide");
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        $.notify(errorThrown, "error");
+                    },
+                    complete: function () {
+                        $("form :input").prop("disabled", false);
+                    }
+                });
+            }
+        });
+    }
+
+    function actLaboratorio() {
+        $("#formLaboratorio").validate({
+            rules: {
+                nombre: "required",
+                descripcion: "required"
+            },
+            submitHandler: function (form) {
+                var formData = new FormData(form);
+                $.ajax({
+                    type: $(form).attr('method'),
+                    enctype: "multipart/form-data",
+                    url: $(form).attr('action'),
+                    dataType: "json",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    beforeSend: function () {
+                        $("form :input").prop("disabled", true);
+                    },
+                    success: function (data) {
+                        const rsp = data.respuesta;
+                        $.notify(rsp.mensaje, rsp.tipo);
+                        if (rsp.estado) {
+                            $("#mdlGigaFarma").modal("hide");
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        $.notify(errorThrown, "error");
+                    },
+                    complete: function () {
+                        $("form :input").prop("disabled", false);
+                    }
+                });
+            }
+        });
+    }
+    
+    function eliLaboratorio(idLabo) {
+        $.confirm({
+            title: 'Confirmar!',
+            content: '¿Estás seguro de eliminar el laboratorio?',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: 'Control',
+                        data: {
+                            accion: 'eliLaboratorio',
+                            idLaboratorio: idLabo
+                        },
+                        dataType: "json",
+                        timeout: 600000,
+                        beforeSend: function () {
+                            $("body :input").prop("disabled", true);
+                        },
+                        success: function (data) {
+                            const rsp = data.respuesta;
+                            $.notify(rsp.mensaje, rsp.tipo);
+                            if (rsp.estado) {
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1000);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR);
+                            $.notify(errorThrown, "error");
+                        },
+                        complete: function () {
+                            $("body :input").prop("disabled", false);
+                        }
+                    });
+                },
+                cancel: function () {
+                }
+            }
+        });
+    }
     confirma();
     modales();
 

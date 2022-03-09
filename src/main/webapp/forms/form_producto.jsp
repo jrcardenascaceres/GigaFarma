@@ -71,8 +71,8 @@
                             <option value="">---------Elegir---------</option>
                             <%
                                 for (Laboratorio lab : n.lisLab()) {
-                                    String selected = (laboratorio == lab.getIdlab()) ? "selected" : "";
-                                    out.print("<option value='" + lab.getIdlab() + "' " + selected + ">" + lab.getNomlab() + "</option>");
+                                    String selected = (laboratorio == lab.getID_LABORATORIO()) ? "selected" : "";
+                                    out.print("<option value='" + lab.getID_LABORATORIO() + "' " + selected + ">" + lab.getNOMBRE() + "</option>");
                                 }
                             %>
                         </select>

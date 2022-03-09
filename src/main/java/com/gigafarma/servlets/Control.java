@@ -9,6 +9,7 @@ import com.gigafarma.dao.Negocio;
 import com.gigafarma.modelo.Categoria;
 import com.gigafarma.modelo.Compra;
 import com.gigafarma.modelo.DetalleVenta;
+import com.gigafarma.modelo.Laboratorio;
 import com.gigafarma.modelo.Producto;
 import com.gigafarma.modelo.RespuestaCarrito;
 import com.gigafarma.modelo.Venta;
@@ -62,7 +63,7 @@ public class Control extends HttpServlet {
                 registrarProducto(request, response);
                 break;
             case "actProducto":
-                atualizarProducto(request, response);
+                actualizarProducto(request, response);
                 break;
             case "eliProducto":
                 eliminarProducto(request, response);
@@ -96,6 +97,18 @@ public class Control extends HttpServlet {
                 break;
             case "regVenta":
                 regVenta(request, response);
+                break;
+            case "lisLaboratorio":
+                listarLaboratorio(request, response);
+                break;
+            case "regLaboratorio":
+                registrarLaboratorio(request, response);
+                break;
+            case "actLaboratorio":
+                actualizarLaboratorio(request, response);
+                break;
+            case "eliLaboratorio":
+                eliminarLaboratorio(request, response);
                 break;
         }
     }
@@ -144,7 +157,7 @@ public class Control extends HttpServlet {
         pw.println(new Gson().toJson(pr));
     }
 
-    protected void atualizarProducto(HttpServletRequest request, HttpServletResponse response)
+    protected void actualizarProducto(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Producto p = new Producto();
         HttpSession sesionOk = request.getSession();
@@ -392,6 +405,56 @@ public class Control extends HttpServlet {
         }
         PrintWriter pw = response.getWriter();
         pw.println(new Gson().toJson(v));
+    }
+
+    protected void listarLaboratorio(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Laboratorio l = new Laboratorio();
+        negocio.lisLaboratorio();
+        request.getRequestDispatcher("/Laboratorio.jsp").forward(request, response);
+    }
+
+    protected void registrarLaboratorio(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Laboratorio l = new Laboratorio();
+        HttpSession sesionOk = request.getSession();
+        l.setID_LABORATORIO(Integer.parseInt(request.getParameter("idLaboratorio")));
+        l.setESTADO(request.getParameter("Estado"));
+        l.setUSU_ALT(Integer.parseInt(sesionOk.getAttribute("idUsuario").toString()));
+        l.setDESCRIPCION(request.getParameter("descripcion"));
+        l.setNOMBRE(request.getParameter("nombre"));
+        Laboratorio lb = negocio.actLaboratorio(l);
+        PrintWriter pw = response.getWriter();
+        pw.println(new Gson().toJson(lb));
+    }
+
+    protected void actualizarLaboratorio(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Laboratorio l = new Laboratorio();
+        HttpSession sesionOk = request.getSession();
+        l.setID_LABORATORIO(Integer.parseInt(request.getParameter("idLaboratorio")));
+        l.setESTADO(request.getParameter("Estado"));
+        l.setUSU_MOD(Integer.parseInt(sesionOk.getAttribute("idUsuario").toString()));
+        l.setDESCRIPCION(request.getParameter("descripcion"));
+        l.setNOMBRE(request.getParameter("nombre"));
+
+        
+        Laboratorio lb = negocio.actLaboratorio(l);
+        
+        PrintWriter pw = response.getWriter();
+        pw.println(new Gson().toJson(lb));
+    }
+
+    protected void eliminarLaboratorio(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Laboratorio l = new Laboratorio();
+        HttpSession sesionOk = request.getSession();
+        l.setID_LABORATORIO(Integer.parseInt(request.getParameter("idLaboratorio")));
+        l.setESTADO("E");
+        l.setUSU_BAJ((sesionOk.getAttribute("idLaboratorio").toString()));
+
+        PrintWriter pw = response.getWriter();
+        pw.println(new Gson().toJson(negocio.eliLaboratorio(l)));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
