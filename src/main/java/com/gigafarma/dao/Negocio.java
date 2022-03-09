@@ -524,16 +524,16 @@ public class Negocio {
         return v;
     }
 
-    public DetalleVenta regDetVenta(int idVenta, int idProd, double precio, int cantidad) {
-        DetalleVenta dv = new DetalleVenta();
+    public DetalleVenta regDetVenta(DetalleVenta dv) {
         Respuesta r = new Respuesta();
         try {
-            String sql = "{CALL SP_INSERT_DETVENTA(?, ?, ?, ?)}";
+            String sql = "{CALL SP_INSERT_DETVENTA(?, ?, ?, ?, ?)}";
             cs = cdb.getConnection().prepareCall(sql);
-            cs.setInt(1, idVenta);
-            cs.setInt(2, idProd);
-            cs.setDouble(3, precio);
-            cs.setInt(4, cantidad);
+             cs.setInt(1, dv.getUSU_ALT());
+            cs.setInt(2, dv.getVENTA());
+            cs.setInt(3, dv.getPRODUCTO());
+            cs.setDouble(4, dv.getPRECIO());
+            cs.setInt(5, dv.getCANTIDAD());
             if (cs.executeUpdate() > 0) {
                 r.setEstado(true);
                 r.setMensaje("Venta registrado.");

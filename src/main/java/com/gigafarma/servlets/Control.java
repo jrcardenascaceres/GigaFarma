@@ -369,19 +369,26 @@ public class Control extends HttpServlet {
         v.setUSU_ALT(Integer.parseInt(hs.getAttribute("idUsuario").toString()));
         v.setCORREO(request.getParameter("correo"));
         v.setDIRECCION(request.getParameter("direccion") + " | " + request.getParameter("distrito") + " - " + request.getParameter("provincia") + " - " + request.getParameter("departamento"));
-        v.setTARJETA(request.getParameter("num_trjt:"));
-        v.setTIP_ENTREGA(request.getParameter("metodo_envio:"));
+        v.setTARJETA(request.getParameter("num_trjt"));
+        v.setTIP_ENTREGA(request.getParameter("metodo_envio"));
         int idVenta = negocio.getNextIdVenta();
         v.setID_VENTA(idVenta);
-        v = negocio.regVenta(v);        
-        
-        DetalleVenta dv = new DetalleVenta();
+        v = negocio.regVenta(v);
+
         if (v.getRespuesta().isEstado()) {
             List<Compra> compras = (ArrayList<Compra>) hs.getAttribute("carrito");
+            DetalleVenta dv;
             for (Compra cmpr : compras) {
-                negocio.regDetVenta(idVenta, cmpr.getID_PRODUCTO(), cmpr.getPRECIO(), cmpr.getCantidad());
+                dv = new DetalleVenta();
+                dv.setUSU_ALT(Integer.parseInt(hs.getAttribute("idUsuario").toString()));
+                dv.setPRODUCTO(cmpr.getID_PRODUCTO());
+                dv.setCANTIDAD(cmpr.getCantidad());
+                dv.setPRECIO(cmpr.getPRECIO());
+                dv.setVENTA(idVenta);
+                negocio.regDetVenta(dv);
             }
-            hs.setAttribute("carrito", new ArrayList());
+            hs.removeAttribute("carrito");
+            hs.removeAttribute("cantArticulos");
         }
         PrintWriter pw = response.getWriter();
         pw.println(new Gson().toJson(v));

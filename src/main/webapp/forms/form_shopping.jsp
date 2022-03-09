@@ -203,7 +203,7 @@
                 return form.valid();
             },
             onFinished: function (event, currentIndex) {
-                var formData = new FormData(form);
+                var formData = new FormData($("#wizard-form")[0]);
                 $.ajax({
                     type: "POST",
                     enctype: "multipart/form-data",
