@@ -99,8 +99,8 @@
                                                 <li class="last"><b>Subtotal de la compra <span>S/ <%=total%></span></b></li>
                                             </ul>
                                             <div class="button5">
+                                                <a href="shop.jsp" class="btn btn-secondary">Seguir comprando</a>
                                                 <a href="form_checkout.jsp" class="btn btn-primary">Realizar pedido</a>
-                                                <a href="shop.html" class="btn btn-secondary">Seguir comprando</a>
                                             </div>
                                         </div>
                                     </div>

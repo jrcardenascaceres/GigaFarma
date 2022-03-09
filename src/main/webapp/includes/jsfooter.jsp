@@ -13,4 +13,6 @@
 <script src="assets/js/custom.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
+<script src="assets/node_modules/jquery.steps-1.1.0/jquery.steps.min.js"></script>
+
 <!-- End Script -->

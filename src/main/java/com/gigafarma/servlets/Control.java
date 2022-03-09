@@ -8,8 +8,10 @@ package com.gigafarma.servlets;
 import com.gigafarma.dao.Negocio;
 import com.gigafarma.modelo.Categoria;
 import com.gigafarma.modelo.Compra;
+import com.gigafarma.modelo.DetalleVenta;
 import com.gigafarma.modelo.Producto;
 import com.gigafarma.modelo.RespuestaCarrito;
+import com.gigafarma.modelo.Venta;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -91,6 +93,9 @@ public class Control extends HttpServlet {
                 break;
             case "listprodxcategoria":
                 ListaProductoxCategoria(request, response);
+                break;
+            case "regVenta":
+                regVenta(request, response);
                 break;
         }
     }
@@ -253,30 +258,29 @@ public class Control extends HttpServlet {
         hs.setAttribute("carrito", compras);
         request.getRequestDispatcher("/pagCompra.jsp").forward(request, response);
     }
-    
+
     protected void listarCategorias(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Categoria c = new Categoria();
         negocio.lisCategorias();
         request.getRequestDispatcher("/Categorias.jsp").forward(request, response);
     }
-    
+
     protected void obtenerListaProductosXCategoria(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Producto p = new Producto();
         negocio.lisProductos();
         request.getRequestDispatcher("/Productos.jsp").forward(request, response);
     }
-    
-    
+
     protected void ListaProductoxCategoria(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int idCategoria=Integer.parseInt(request.getParameter("idCategoria"));
+        int idCategoria = Integer.parseInt(request.getParameter("idCategoria"));
         HttpSession ses = request.getSession();
         ses.setAttribute("idCategoria", idCategoria);
         request.getRequestDispatcher("/shop_cate.jsp").forward(request, response);
     }
-    
+
     protected void registrarCategoria(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Categoria c = new Categoria();
@@ -292,7 +296,7 @@ public class Control extends HttpServlet {
         }
         fileName = negocio.getNextCodCate() + "." + extension;
         c.setImagen(fileName);
-        Categoria cr=negocio.regCategoria(c);
+        Categoria cr = negocio.regCategoria(c);
         if (cr.getRespuesta().isEstado()) {
             InputStream is = part.getInputStream();
             byte[] data = new byte[is.available()];
@@ -306,14 +310,14 @@ public class Control extends HttpServlet {
         PrintWriter pw = response.getWriter();
         pw.println(new Gson().toJson(cr));;
     }
-    
+
     protected void actualizarCategoria(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Categoria c = new Categoria();
         HttpSession sesionOk = request.getSession();
         c.setIdCategoria(Integer.parseInt(request.getParameter("idCategoria")));
         c.setCategoria(request.getParameter("nombre"));
-        
+
         Part part = request.getPart("imagen");
 
         String fileName = part.getSubmittedFileName();
@@ -332,7 +336,7 @@ public class Control extends HttpServlet {
         }
         c.setImagen(fileName);
         Categoria cr = negocio.actCategoria(c);
-        
+
         if (cr.getRespuesta().isEstado() && isUpdate) {
             InputStream is = part.getInputStream();
             byte[] data = new byte[is.available()];
@@ -357,7 +361,30 @@ public class Control extends HttpServlet {
         PrintWriter pw = response.getWriter();
         pw.println(new Gson().toJson(negocio.eliCategoria(c)));
     }
+
+    protected void regVenta(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Venta v = new Venta();
+        HttpSession hs = request.getSession();
+        v.setUSU_ALT(Integer.parseInt(hs.getAttribute("idUsuario").toString()));
+        v.setCORREO(request.getParameter("correo"));
+        v.setDIRECCION(request.getParameter("direccion") + " | " + request.getParameter("distrito") + " - " + request.getParameter("provincia") + " - " + request.getParameter("departamento"));
+        v.setTARJETA(request.getParameter("num_trjt:"));
+        v.setTIP_ENTREGA(request.getParameter("metodo_envio:"));
         
+        v = negocio.regVenta(v);
+        
+        int idVenta = 0;
+        DetalleVenta dv = new DetalleVenta();
+        if (v.getRespuesta().isEstado()) {
+            List<Compra> compras = (ArrayList<Compra>) hs.getAttribute("carrito");
+            for (Compra cmpr : compras) {
+                negocio.regDetVenta(idVenta, cmpr.getID_PRODUCTO(), cmpr.getPRECIO(), cmpr.getCantidad());
+            }
+        }
+        PrintWriter pw = response.getWriter();
+        pw.println(new Gson().toJson(v));
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

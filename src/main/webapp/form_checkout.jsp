@@ -34,22 +34,22 @@
         <!-- Close Top Nav -->
 
         <jsp:include page="includes/header.jsp" />
+
         <div class="container">
             <form action="Control" method="POST">
-                <legend>Información personal</legend>
-                <div class="mb-3">
-                    <label for="correo" class="form-label">Correo electrónico</label>
-                    <input type="email" class="form-control" id="correo" name="correo" aria-describedby="emailHelp">
-                    <%
-                        if (session.getAttribute("idUsuario") == null) {
-                    %>
-                    <div id="emailHelp" class="form-text">¿Ya tienes una cuenta? <a href="login.jsp">Iniciar Sesión</a></div>
-                    <%
-                        }
-                    %>
-                </div>
-                <legend>Direcciòn de envio</legend>
+                <legend class="mt-2">Información personal y Dirección de envío</legend>
                 <div class="row">
+                    <div class="mb-3 col-12">
+                        <label for="correo" class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-control" id="correo" name="correo" aria-describedby="emailHelp">
+                        <%
+                            if (session.getAttribute("idUsuario") == null) {
+                        %>
+                        <div id="emailHelp" class="form-text">¿Ya tienes una cuenta? <a href="login.jsp">Iniciar sesión</a></div>
+                        <%
+                            }
+                        %>
+                    </div>
                     <div class="mb-3 col-6">
                         <label for="nombres" class="form-label">Nombres</label>
                         <input type="text" class="form-control" id="nombres" name="nombres">
@@ -74,12 +74,13 @@
                         <label for="direccion" class="form-label">Dirección</label>
                         <input type="text" class="form-control" id="direccion" name="direccion">
                     </div>
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                    <div class="mb-3 col-12">
+                        <div class="float-end">
+                            <button type="submit" id="retornar" class="btn btn-secondary">Retornar al carro de compras</button>
+                            <button type="submit" id="continuar" class="btn btn-primary">Continuar con el método de envío</button>
+                        </div>                            
+                    </div>
+                </div>                
             </form>
         </div>
 

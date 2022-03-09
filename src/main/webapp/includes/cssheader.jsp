@@ -14,3 +14,4 @@
 <link rel="stylesheet" type="text/css" href="assets/css/slick.min.css">
 <link rel="stylesheet" type="text/css" href="assets/css/slick-theme.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<link rel="stylesheet" href="assets/node_modules/jquery.steps-1.1.0/jquery.steps.css"/>

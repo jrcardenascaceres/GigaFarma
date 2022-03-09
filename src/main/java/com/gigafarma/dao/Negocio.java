@@ -1,10 +1,12 @@
 package com.gigafarma.dao;
 
 import com.gigafarma.modelo.Categoria;
+import com.gigafarma.modelo.DetalleVenta;
 import com.gigafarma.modelo.Laboratorio;
 import com.gigafarma.modelo.Persona;
 import com.gigafarma.modelo.Producto;
 import com.gigafarma.modelo.Respuesta;
+import com.gigafarma.modelo.Venta;
 import com.gigafarma.utill.ConnectionDB;
 import java.util.*;
 import java.sql.*;
@@ -269,12 +271,11 @@ public class Negocio {
         return productos;
     }
 
-    
     public Laboratorio obtenerLabXId(int idLab) {
         Laboratorio l = new Laboratorio();
         Respuesta r = new Respuesta();
         try {
-            String sql = "SELECT ID_LABORATORIO, DESCRIPCION, NOMBRE FROM gigafarma.laboratorio WHERE ID_LABORATORIO = ?"; 
+            String sql = "SELECT ID_LABORATORIO, DESCRIPCION, NOMBRE FROM gigafarma.laboratorio WHERE ID_LABORATORIO = ?";
             ps = cdb.getConnection().prepareStatement(sql);
             ps.setInt(1, idLab);
             rs = ps.executeQuery();
@@ -320,8 +321,7 @@ public class Negocio {
         }
         return lista;
     }
-    
-       
+
     public Categoria regCategoria(Categoria c) {
         Respuesta r = new Respuesta();
         try {
@@ -400,7 +400,7 @@ public class Negocio {
         try {
             String sql = "UPDATE gigafarma.categoria SET ESTADO=? WHERE ID_CATEGORIA=?";
             ps = cdb.getConnection().prepareStatement(sql);
-            ps.setString(1,  String.valueOf(c.getEstado()));
+            ps.setString(1, String.valueOf(c.getEstado()));
             ps.setInt(2, c.getIdCategoria());
             if (ps.executeUpdate() > 0) {
                 r.setEstado(true);
@@ -446,9 +446,9 @@ public class Negocio {
             close();
         }
         c.setRespuesta(r);
-        return c;            
+        return c;
     }
-    
+
     public List<Producto> obtenerListProdXCate(int idCategoria) {
         List<Producto> productos = new ArrayList();
         try {
@@ -475,10 +475,10 @@ public class Negocio {
         } finally {
             close();
         }
-        return productos;            
+        return productos;
     }
-    
-     public String getNextCodCate() {
+
+    public String getNextCodCate() {
         String nextCodCate = "";
         try {
             String sql = "{CALL SP_NEXT_COD_CATE()}";
@@ -494,5 +494,61 @@ public class Negocio {
         }
         return nextCodCate;
     }
- 
+
+    public Venta regVenta(Venta v) {
+        Respuesta r = new Respuesta();
+        try {
+            String sql = "{CALL SP_INSERT_VENTA(?, ?, ?, ?, ?, ?)}";
+            cs = cdb.getConnection().prepareCall(sql);
+            cs.setInt(1, v.getUSU_ALT());
+            cs.setString(2, v.getDESCRIPCION());
+            cs.setString(3, v.getCORREO());
+            cs.setString(4, v.getDIRECCION());
+            cs.setString(5, v.getTARJETA());
+            cs.setString(6, v.getTIP_ENTREGA());
+            if (cs.executeUpdate() > 0) {
+                r.setEstado(true);
+                r.setMensaje("Venta registrado.");
+                r.setTipo("success");
+            } else {
+                r.setMensaje("No se puede registrar la venta.");
+                r.setTipo("error");
+            }
+        } catch (SQLException e) {
+            r.setMensaje(e.getMessage());
+            r.setTipo("error");
+        } finally {
+            close();
+        }
+        v.setRespuesta(r);
+        return v;
+    }
+
+    public DetalleVenta regDetVenta(int idVenta, int idProd, double precio, int cantidad) {
+        DetalleVenta dv = new DetalleVenta();
+        Respuesta r = new Respuesta();
+        try {
+            String sql = "{CALL SP_INSERT_DETVENTA(?, ?, ?, ?, ?, ?)}";
+            cs = cdb.getConnection().prepareCall(sql);
+            cs.setInt(1, idVenta);
+            cs.setInt(2, idProd);
+            cs.setDouble(3, precio);
+            cs.setInt(4, cantidad);
+            if (cs.executeUpdate() > 0) {
+                r.setEstado(true);
+                r.setMensaje("Venta registrado.");
+                r.setTipo("success");
+            } else {
+                r.setMensaje("No se puede registrar la venta.");
+                r.setTipo("error");
+            }
+        } catch (SQLException e) {
+            r.setMensaje(e.getMessage());
+            r.setTipo("error");
+        } finally {
+            close();
+        }
+        dv.setRespuesta(r);
+        return dv;
+    }
 }
