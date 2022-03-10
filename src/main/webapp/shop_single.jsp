@@ -124,7 +124,7 @@
                                         <h6>Laboratorio:</h6>
                                     </li>
                                     <li class="list-inline-item">
-                                        <p class="text-muted"><strong><%=lab.getNomlab()%></strong></p>
+                                        <p class="text-muted"><strong><%=lab.getNOMBRE()%></strong></p>
                                     </li>
                                 </ul>
 

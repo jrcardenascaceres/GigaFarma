@@ -7,6 +7,7 @@ import com.gigafarma.modelo.Persona;
 import com.gigafarma.modelo.Producto;
 import com.gigafarma.modelo.Respuesta;
 import com.gigafarma.modelo.Venta;
+import com.gigafarma.modelo.VentaCliente;
 import com.gigafarma.utill.ConnectionDB;
 import java.util.*;
 import java.sql.*;
@@ -568,7 +569,6 @@ public class Negocio {
         }
         return lista;
     }
-      
 
     public Laboratorio regLaboratorio(Laboratorio l) {
         Respuesta r = new Respuesta();
@@ -701,4 +701,26 @@ public class Negocio {
         return l;
     }
 
+    public List<VentaCliente> getComprasCliByAnio(int mes, int anio) {
+        List<VentaCliente> ventas = new ArrayList();
+        try {
+            String sql = "{CALL SP_GET_COMPRAS_XANIO(?, ?)}";
+            cs = cdb.getConnection().prepareCall(sql);
+            cs.setInt(1, mes);
+            cs.setInt(2, anio);            
+            rs = cs.executeQuery();
+            VentaCliente v;
+            while (rs.next()) {
+                v = new VentaCliente();
+                v.setNomCliente(rs.getString(1));
+                v.setCodCliente(rs.getString(2));
+                v.setImporte(rs.getDouble(3));
+                ventas.add(v);
+            }
+        } catch (SQLException e) {
+        } finally {
+            close();
+        }
+        return ventas;
+    }
 }
