@@ -407,7 +407,7 @@ public class Negocio {
             ps.setInt(1, idCategoria);
             rs = ps.executeQuery();
             Producto p;
-            if (rs.next()) {
+            while (rs.next()) {
                 p = new Producto();
                 p.setID_PRODUCTO(rs.getInt(1));
                 p.setNOMBRE(rs.getString(2));
@@ -418,8 +418,7 @@ public class Negocio {
                 p.setCANTIDAD(rs.getInt(7));
                 p.setIMAGEN(rs.getString(8));
                 productos.add(p);
-            } else {
-            }
+            } 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

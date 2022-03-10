@@ -115,7 +115,7 @@
                                         +"</div>"       
                                         +"</div>"     
                                         +"<div class='card-body'>"
-                                        +"<a href='shop-single.html' class='h3 text-decoration-none'>"+producto.getNOMBRE()+"</a>"
+                                        +"<a href=''shop_single.jsp?idProducto="+idProducto+"'' class='h3 text-decoration-none'>"+producto.getNOMBRE()+"</a>"
                                         +"<ul class='w-100 list-unstyled d-flex justify-content-between mb-0'>"
                                         +"<li>"+producto.getDESCRIPCION()+"</li>"
                                         +"<li class='pt-2'>"
