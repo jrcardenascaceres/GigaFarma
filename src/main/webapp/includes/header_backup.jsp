@@ -17,6 +17,9 @@
                     if (session.getAttribute("perfil") != null && session.getAttribute("perfil").equals("0")) {
                     %>
                     <li class="nav-item">
+                        <a class="nav-link" href="personas.jsp">Personas</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="productos.jsp">Productos</a>
                     </li>
                     <li class="nav-item">
@@ -24,6 +27,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="categorias.jsp">Categorías</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ofertas.jsp">Ofertas</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="ventas.jsp">Ventas</a>
